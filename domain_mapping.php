@@ -444,7 +444,7 @@ function dm_manage_page() {
 	$domains = $wpdb->get_results( "SELECT * FROM {$wpdb->dmtable} WHERE blog_id = '{$wpdb->blogid}'", ARRAY_A );
 	if ( is_array( $domains ) && !empty( $domains ) ) {
 		$orig_url = parse_url( get_original_url( 'siteurl' ) );
-		$domains[] = array( 'domain' => $orig_url[ 'host' ], 'path' => $orig_url[ 'path' ], 'active' => 0 );
+		$domains[] = array( 'domain' => $orig_url[ 'host' ], 'path' => array_key_exists('path', $orig_url) ? $orig_url[ 'path' ] : '', 'active' => 0 );
 		echo "<h3>" . __( 'Active domains on this blog', 'wordpress-mu-domain-mapping' ) . "</h3>";
 		echo '<form method="POST">';
 		echo "<table><tr><th>" . __( 'Primary', 'wordpress-mu-domain-mapping' ) . "</th><th>" . __( 'Domain', 'wordpress-mu-domain-mapping' ) . "</th><th>" . __( 'Delete', 'wordpress-mu-domain-mapping' ) . "</th></tr>\n";
@@ -459,7 +459,7 @@ function dm_manage_page() {
 			if ( $details[ 'active' ] == 1 )
 				echo "checked='1' ";
 			echo "/>";
-			$url = "{$protocol}{$details[ 'domain' ]}{$details[ 'path' ]}";
+			$url = "{$protocol}{$details[ 'domain' ]}".(array_key_exists('path', $details) ? $details[ 'path' ] : '');
 			echo "</td><td><a href='$url'>$url</a></td><td style='text-align: center'>";
 			if ( $details[ 'domain' ] != $orig_url[ 'host' ] && $details[ 'active' ] != 1 ) {
 				echo "<a href='" . wp_nonce_url( add_query_arg( array( 'domain' => $details[ 'domain' ] ), $del_url ), "delete" . $details[ 'domain' ] ) . "'>Del</a>";
