@@ -370,7 +370,7 @@ function dm_handle_actions() {
 				exit;
 			break;
 		}
-	} elseif( $_GET[ 'action' ] == 'delete' ) {
+	} elseif( array_key_exists('action', $_GET) && $_GET[ 'action' ] == 'delete' ) {
 		$domain = $wpdb->prepare( $_GET[ 'domain' ] );
 		if ( $domain == '' ) {
 			wp_die( __( "You must enter a domain", 'wordpress-mu-domain-mapping' ) );
