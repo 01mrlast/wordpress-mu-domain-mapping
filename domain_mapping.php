@@ -351,7 +351,7 @@ function dm_handle_actions() {
 					if ( array_key_exists('primary', $_POST) && $_POST[ 'primary' ] ) {
 						$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->dmtable} SET active = 0 WHERE blog_id = %d", $wpdb->blogid ) );
 					}
-					$wpdb->query( $wpdb->prepare( "INSERT INTO {$wpdb->dmtable} ( `id` , `blog_id` , `domain` , `active` ) VALUES ( NULL, %d, %s, %d )", $wpdb->blogid, $domain, $_POST[ 'primary' ] ) );
+					$wpdb->query( $wpdb->prepare( "INSERT INTO {$wpdb->dmtable} ( `id` , `blog_id` , `domain` , `active` ) VALUES ( NULL, %d, %s, %d )", $wpdb->blogid, $domain, array_key_exists('primary', $_POST) ? $_POST[ 'primary' ] : '' ) );
 					wp_redirect( add_query_arg( array( 'updated' => 'add' ), $url ) );
 					exit;
 				} else {
