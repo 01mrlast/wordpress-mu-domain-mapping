@@ -837,4 +837,42 @@ function dm_idn_warning() {
 	return sprintf( __( 'International Domain Names should be in <a href="%s">punycode</a> format.', 'wordpress-mu-domain-mapping' ), "http://api.webnic.cc/idnconversion.html" );
 }
 
+class MuDomainMapping {
+	
+	private static $instance = null;
+	
+	/**
+	 * create or get object instance
+	 * @return MuDomainMapping
+	 */
+	public static function get_instance() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
+	
+	function __construct() {
+		add_action('init', array($this, 'init') );
+	}
+	
+	function init() {
+		add_filter('et_builder_custom_fonts', array($this, 'et_builder_custom_fonts') );
+	}
+	
+	function et_builder_custom_fonts($all_custom_fonts) {
+		foreach ($all_custom_fonts as $font_name => $font_array) {
+			if(array_key_exists('font_url', $font_array) && is_array($font_array['font_url'])) {
+				foreach ($font_array['font_url'] as $ext => $url) {
+					$all_custom_fonts[$font_name]['font_url'][$ext] = domain_mapping_post_content($url);
+				}
+			}
+		}
+		var_dump($all_custom_fonts);//die();
+		return $all_custom_fonts;
+	}
+}
+
+MuDomainMapping::get_instance();
+
 ?>
