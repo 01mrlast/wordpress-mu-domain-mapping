@@ -868,7 +868,7 @@ class MuDomainMapping {
 				}
 			}
 		}
-		var_dump($all_custom_fonts);//die();
+		//var_dump($all_custom_fonts);//die();
 		return $all_custom_fonts;
 	}
 }
